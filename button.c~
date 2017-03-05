@@ -1,0 +1,69 @@
+#include "button.h"
+#include "MK70F12.h"
+//#include "led.h"
+
+void btn_init()
+{
+	// Enable clock gating to the correct pin port
+	SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK;
+	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
+	
+	// Configure the LED pins to be GPIOs
+	PORTD_PCR0 = PORT_PCR_MUX(1) | PORT_PCR_DSE_MASK | PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
+	PORTE_PCR26 = PORT_PCR_MUX(1) | PORT_PCR_DSE_MASK | PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
+	
+	// Set the LED GPIO pins as outputs, and set them by default
+	// (the LEDs are 'active-low')
+	GPIOA_PDDR = (1 << 0) | (1 << 26);
+	GPIOA_PDOR = (1 << 0) | (1 << 26);
+}
+
+void btn_push(int btn_id)
+{
+	led_toggle(LED_RED);
+	led_toggle(LED_BLUE);
+
+	switch(btn_id)
+	{
+		case BTN_1:
+			GPIOA_PCOR = BTN_BIT_1;
+			break;
+		case BTN_2:
+			GPIOA_PCOR = BTN_BIT_2;
+			break;
+	}
+}
+
+void btn_release(int led_id)
+{
+	switch(btn_id)
+	{
+		case BTN_1:		
+			GPIOA_PSOR = BTN_BIT_1;
+			break;
+		case BTN_2:
+			GPIOA_PSOR = BTN_BIT_2;
+			break;
+	}
+}
+
+
+/*
+void led_toggle(int led_id)
+{
+	switch(led_id)
+	{
+		case LED_RED:		
+			GPIOA_PTOR = BIT_RED;
+			break;
+		case LED_BLUE:
+			GPIOA_PTOR = BIT_BLUE;
+			break;
+		case LED_YELLOW:
+			GPIOA_PTOR = BIT_YELLOW;
+			break;
+		case LED_GREEN:
+			GPIOA_PTOR = BIT_GREEN;
+			break;
+	}
+}*/
