@@ -16,7 +16,7 @@ LDSCRIPT=bareboard_flash.lcf
 LDFLAGS=-proc=cortex-m4 -thumb -nostdlib $(LDSCRIPT) -g -L$(FS_PREFIX)/ARM_EABI_Support/ewl/lib -lavender model=ewl ,print=none ,scan=none ,io=none 
 
 # Specify the source files to be compiled here
-MAIN_SOURCES=main.c vectors.c led.c button.c 
+MAIN_SOURCES=main.c vectors.c led.c button.c uart.c 
 MAIN_OBJECTS = $(MAIN_SOURCES:.c=.o)
 
 .PHONY: clean
